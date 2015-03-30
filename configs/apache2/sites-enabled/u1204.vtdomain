@@ -1,0 +1,17 @@
+<VirtualHost *:80>
+    ServerAdmin webmaster@u1204.vtdomain
+    ServerName u1204.vtdomain
+
+    DocumentRoot /var/www/u1204
+    <Directory />
+        Options FollowSymLinks
+        AllowOverride None
+    </Directory>
+    <Directory /var/www/u1204/>
+        Options Indexes FollowSymLinks MultiViews
+        AllowOverride None
+        Order allow,deny
+        allow from all
+    </Directory>
+
+</VirtualHost>

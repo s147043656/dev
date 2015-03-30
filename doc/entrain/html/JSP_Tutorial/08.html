@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html><head>
+   <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+   <meta name="GENERATOR" content="Mozilla/4.75 [en] (Win98; U) [Netscape]">
+   <meta name="Description" content="JSP Tutorial">
+   <meta name="Keywords" content="JSP Tutorial">
+   <title>JSP Tutorial</title>
+</head>
+<body>
+<table cellpadding="0" cellspacing="0" cols="1" width="100%" border="0">
+<tbody><tr>
+<td>
+<center>
+<font size="+3"><b>JSP Tutorial</b></font>
+<br>
+		</center>
+</td>
+</tr>
+
+<tr>
+<td>
+<h2>
+JSP Tags</h2>
+Another important syntax element of JSP are tags.&nbsp; JSP tags do not
+use <b><tt>&lt;%</tt></b>, but just the <b><tt>&lt;</tt></b> character.&nbsp;
+A JSP tag is somewhat like an HTML tag.&nbsp; JSP tags can have a "start
+tag", a "tag body" and an "end tag".&nbsp; The start and end tag both use
+the tag name, enclosed in <tt>&lt;</tt> and <tt>&gt;</tt> characters.&nbsp;
+The end starts with a <tt>/</tt> character after the <tt>&lt;</tt> character.&nbsp;
+The tag names have an embedded colon character <tt>:</tt> in them, the
+part before the colon describes the type of the tag.&nbsp; For instance:
+<pre>&lt;some:tag&gt;
+body
+&lt;/some:tag&gt;</pre>
+If the tag does not require a body, the start and end can be conveniently
+merged together, as
+<pre>&lt;some:tag/&gt;</pre>
+Here by closing the start tag with a /&gt; instead of &gt; character, we are
+ending the tag immediately, and without a body.&nbsp; (This syntax convention
+is the the same as XML.)
+<p>Tags can be of two types: loaded from an external tag library, or predefined
+tags.&nbsp;&nbsp; Predefined tags start with <b><tt>jsp:</tt></b> characters.&nbsp;
+For instance, <tt>jsp:include</tt> is a predefined tag that is used to
+include other pages.
+</p><p>We have already seen the <tt>include</tt> directive.&nbsp; jsp:include
+is similar.&nbsp; But instead of loading the text of the included file
+in the original file, it actually calls the included target at run-time
+(the way a browser would call the included target.&nbsp; In practice, this
+is actually a simulated request rather than a full round-trip between the
+browser and the server).&nbsp; Following is an example of <tt>jsp:include</tt>
+usage
+</p><pre>&lt;HTML&gt;
+&lt;BODY&gt;
+Going to include hello.jsp...&lt;BR&gt;
+&lt;jsp:include page="hello.jsp"/&gt;
+&lt;/BODY&gt;
+&lt;/HTML&gt;</pre>
+Try it and see what you get.&nbsp; Now change the "<tt>jsp:include</tt>"
+to "<tt>jsp:forward</tt>" and see what is the difference.&nbsp; These two
+predefined tags are frequently very useful.
+<p><i>Exercise:</i>&nbsp; Write a JSP to do either a <tt>forward</tt> or
+an <tt>include</tt>, depending upon a boolean variable (hint:&nbsp; The
+concepts of mixing HTML and scriptlets work with JSP tags also!)
+<br>&nbsp;
+</p><center><!-- jsp:include page="/header.jsp"/ --></center>
+<br>
+<table cellpadding="0" cellspacing="0" width="100%" border="0">
+<tbody><tr>
+<td><a href="09.html">Next tutorial: JSP Sessions</a></td>
+
+<td>
+<div align="right"><font size="-1"><a href="index.html#contents">Contents</a></font></div>
+</td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+
+<tr>
+<td></td>
+</tr>
+</tbody></table>
+
+
+
+</body></html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html><head>
+   <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+   <meta name="GENERATOR" content="Mozilla/4.79 [en] (Windows NT 5.0; U) [Netscape]">
+   <meta name="Description" content="JSP Tutorial">
+   <meta name="Keywords" content="JSP Tutorial">
+   <title>JSP Tutorial</title>
+</head>
+<body>
+&nbsp;
+<table cellpadding="0" cellspacing="0" cols="1" width="100%" border="0">
+<tbody><tr>
+<td>
+<center><b><font size="+3">JSP Tutorial</font></b>
+<br>
+		</center>
+</td>
+</tr>
+
+<tr>
+<td>
+<h2>
+Adding dynamic content via expressions</h2>
+As we saw in the previous section, any HTML file can be turned into a JSP
+file by changing its extension to .jsp.&nbsp; Of course, what makes JSP
+useful is the ability to embed Java.&nbsp; Put the following text in a
+file with .jsp extension (let us call it <b><tt>hello.jsp</tt></b>), place
+it in your JSP directory, and view it in a browser.&nbsp;
+<pre>&lt;HTML&gt;
+&lt;BODY&gt;
+Hello!&nbsp; The time is now &lt;%= new java.util.Date() %&gt;
+&lt;/BODY&gt;
+&lt;/HTML&gt;</pre>
+Notice that each time you reload the page in the browser, it comes up with
+the current time.
+<p>The character sequences <tt>&lt;%=</tt> and <tt>%&gt;</tt> enclose Java
+expressions, which are evaluated at run time.
+</p><p>This is what makes it possible to use JSP to generate dyamic HTML pages
+that change in response to user actions or vary from user to user.
+</p><p><i>Exercise:</i>&nbsp; Write a JSP to output the values returned by
+<tt>System.getProperty</tt>
+for various system properties such as <tt>java.version, java.home, os.name,
+user.name, user.home, user.dir</tt> etc.
+<br>&nbsp;
+<table cellpadding="0" cellspacing="0" width="100%" border="0">
+<tbody><tr>
+<td><a href="04.html">Next tutorial: Scriptlets</a></td>
+
+<td>
+<div align="right"><font size="-1"><a href="index.html#contents">Contents</a></font></div>
+</td>
+</tr>
+</tbody></table>
+</p></td>
+</tr>
+
+<tr>
+<td></td>
+</tr>
+</tbody></table>
+
+
+
+</body></html>

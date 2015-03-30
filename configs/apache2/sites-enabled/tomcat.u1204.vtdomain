@@ -1,0 +1,9 @@
+<VirtualHost *:80>
+    ServerAdmin webmaster@u1204.vtdomain
+    ServerName tomcat.u1204.vtdomain
+    ProxyRequests off
+    ProxyPreserveHost on
+    ProxyPass / http://tomcat.u1204.vtdomain:8080/
+    ErrorLog "${APACHE_LOG_DIR}/tomcat.u1204.vtdomain-error.log"
+    CustomLog "${APACHE_LOG_DIR}/tomcat.u1204.vtdomain-access.log" combined
+</VirtualHost>

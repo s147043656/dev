@@ -1,0 +1,2 @@
+tomcat_dir=~/programming/servers/tomcat
+dist_dir=../apps/${appname}/target

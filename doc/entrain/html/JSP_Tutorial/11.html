@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html><head>
+   <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+   <meta name="GENERATOR" content="Mozilla/4.75 [en] (Win98; U) [Netscape]">
+   <meta name="Description" content="JSP Tutorial">
+   <meta name="Keywords" content="JSP Tutorial">
+   <title>JSP Tutorial</title>
+</head>
+<body>
+<table cellpadding="0" cellspacing="0" cols="1" width="100%" border="0">
+<tbody><tr>
+<td>
+<center>
+<font size="+3"><b>JSP Tutorial</b></font>
+<br>
+		</center>
+</td>
+</tr>
+
+<tr>
+<td>
+<h2>
+Controllers</h2>
+Sometimes, some pre-processing needs to be done after the user has
+submitted a form.  The result of this pre-processing decides where
+the control flow should go next.  Such pre-processing code is
+frequently referred to as a "controller".
+<p>
+JSPs are very highly suited for writing simple controllers.  For more
+complex controller logic, JSPs can easily call Java code in other classes.
+A sample controller is shown below:
+</p><p>
+</p><pre><tt>
+&lt;jsp:useBean id="user" class="user.UserData" scope="session"/&gt;
+&lt;jsp:setProperty name="user" property="*"/&gt;&nbsp;
+&lt;%
+    String tgtPage = null;
+    if ( user.choice.equals( "choice1" ))
+        tgtPage = "tgt1.jsp";
+    else if ( user.choice.equals( "choice2" ))
+        tgtPage = "tgt2.jsp";
+    else
+        tgtPage = "tgtDefault.jsp";
+     response.sendRedirect( tgtPage );
+%&gt;
+</tt></pre>
+Here we have a very simple code fragment, that is determining the next
+JSP to transfer control to.  (Note that any output generated
+by this JSP would not actually be used, because the browser will be
+sent to a different location!)
+<p>
+If the logic were more complicated, it could have been put in a
+regular Java class, and the JSP could have made calls into that
+Java class.
+</p><p>
+Some frameworks use much more complicated mechanisms to do something as
+simple as this.  For example, these complicated mechanisms may
+require configuration files which have to be changed for every change
+in call-flow, and may involve Java classes with particular complicated rules.
+</p><p>
+But an objective review reveals that there is no actual advantage to these over-complicated
+mechanisms.  They merely introduce many more
+places where things can and do go wrong.
+</p><p>
+Sometimes, the desire to use these more complicated mechanisms arises
+from a misunderstanding - that JSPs are meant for display, therefore they
+can never be used when their output is not of interest.  This is not correct.
+</p><p>
+It is true
+that JSPs are primarily HTML with embedded code.  However, they have many
+advantages, such as requiring less (typically none) configuration, and
+being easy to modify and deploy.  Therefore they can lend themselves to other usages,
+such as writing simple and straightforward controllers.
+Ultimately, JSPs are just one tool in your toolbox.
+You should look at and evaluate each tool objectively, and put them
+to best advantage.  That means using JSPs as controllers, as long
+as they provide the simplest and most effective means of doing that.
+</p><p>
+<br>
+<table cellpadding="0" cellspacing="0" width="100%" border="0">
+<tbody><tr>
+<td><a href="12.html">Next tutorial: Tag Libraries</a></td>
+
+<td>
+<div align="right"><font size="-1"><a href="index.html#contents">Contents</a></font></div>
+</td>
+</tr>
+</tbody></table>
+</p></td>
+</tr>
+
+<tr>
+<td></td>
+</tr>
+</tbody></table>
+
+
+</body></html>

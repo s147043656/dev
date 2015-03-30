@@ -1,0 +1,649 @@
+http://jsptut.com/
+
+ Tutorial Overview
+The prerequisites for the tutorial are:
+
+    HTML.  You should be able to put together HTML pages.
+    Java.  You should be able to program in Java.
+
+This tutorial teaches JSP by progressing from very simple examples to complex examples.
+
+Advanced learners may want to do a quick review of the introductory material and skip to the lessons appropriate to their level.
+
+The steps in the tutorial are outlined below:
+
+    Getting familiar with your JSP server
+    Your first JSP
+    Adding dynamic content via expressions
+    Scriptlets
+    Mixing Scriptlets and HTML
+    Directives
+    Declarations
+    Tags
+    Sessions
+    Beans and Forms Processing
+    Controllers
+    Tag Libraries
+    Form Editing
+    Log-in pages
+    Further learning
+
+First step:  Getting familiar with your JSP server 
+
+ Getting Familiar with your JSP server
+If you do not have a JSP capable web-server or application server, the first step is to download one.  There are many such servers available, most of which can be downloaded for free evaluation and/or development.  Some of them are:
+
+    Blazix from Desiderata Software (1.5 Megabytes, JSP, Servlets and EJBs)
+    TomCat from Apache (Approx 6 Megabytes)
+    WebLogic from BEA Systems (Approx 40 Megabytes, JSP, Servlets and EJBs)
+    WebSphere from IBM (Approx 100 Megabytes, JSP, Servlets and EJBs)
+
+To take the best advantage of this tutorial, it recommended that all the material should be tried out with a real server.  
+
+Once you have a JSP capable web-server or application server, you need to know the following information about it:
+
+    Where to place the files
+    How to access the files from your browser (with an http: prefix, not as file:)
+
+You should be able to create a simple file, such as
+
+    <HTML>
+    <BODY>
+    Hello, world
+    </BODY>
+    </HTML>
+
+know where to place this file and how to see it in your browser with an http:// prefix.
+
+Since this step is different for each web-server, you would need to see the web-server documentation to find out how this is done.  Once you have completed this step, proceed to the next tutorial.
+ 
+Next tutorial: Your first JSP page
+
+ Your first JSP
+JSP simply puts Java inside HTML pages.  You can take any existing HTML page and change its extension to ".jsp" instead of ".html".  In fact, this is the perfect exercise for your first JSP.
+
+Take the HTML file you used in the previous exercise.  Change its extension from ".html" to ".jsp".  Now load the new file, with the ".jsp" extension, in your browser.
+
+You will see the same output, but it will take longer!  But only the first time.  If you reload it again, it will load normally.
+
+What is happening behind the scenes is that your JSP is being turned into a Java file, compiled and loaded.  This compilation only happens once, so after the first load, the file doesn't take long to load anymore.  (But everytime you change the JSP file, it will be re-compiled again.)
+
+Of course, it is not very useful to just write HTML pages with a .jsp extension!  We now proceed to see what makes JSP so useful.
+ 
+Next tutorial: Adding dynamic content via expressions
+
+ Adding dynamic content via expressions
+As we saw in the previous section, any HTML file can be turned into a JSP file by changing its extension to .jsp.  Of course, what makes JSP useful is the ability to embed Java.  Put the following text in a file with .jsp extension (let us call it hello.jsp), place it in your JSP directory, and view it in a browser. 
+
+<HTML>
+<BODY>
+Hello!  The time is now <%= new java.util.Date() %>
+</BODY>
+</HTML>
+
+Notice that each time you reload the page in the browser, it comes up with the current time.
+
+The character sequences <%= and %> enclose Java expressions, which are evaluated at run time.
+
+This is what makes it possible to use JSP to generate dyamic HTML pages that change in response to user actions or vary from user to user.
+
+Exercise:  Write a JSP to output the values returned by System.getProperty for various system properties such as java.version, java.home, os.name, user.name, user.home, user.dir etc.
+ 
+Next tutorial: Scriptlets
+
+ Scriptlets
+We have already seen how to embed Java expressions in JSP pages by putting them between the <%= and %> character sequences.
+
+But it is difficult to do much programming just by putting Java expressions inside HTML.
+
+JSP also allows you to write blocks of Java code inside the JSP.  You do this by placing your Java code between <% and %> characters (just like expressions, but without the = sign at the start of the sequence.)
+
+This block of code is known as a "scriptlet".  By itself, a scriptlet doesn't contribute any HTML (though it can, as we will see down below.)  A scriptlet contains Java code that is executed every time the JSP is invoked. 
+
+Here is a modified version of our JSP from previous section, adding in a scriptlet.
+
+<HTML>
+<BODY>
+<%
+    // This is a scriptlet.  Notice that the "date"
+    // variable we declare here is available in the
+    // embedded expression later on.
+    System.out.println( "Evaluating date now" );
+    java.util.Date date = new java.util.Date();
+%>
+Hello!  The time is now <%= date %>
+</BODY>
+</HTML>
+
+If you run the above example, you will notice the output from the "System.out.println" on the server log.  This is a convenient way to do simple debugging (some servers also have techniques of debugging the JSP in the IDE.  See your server's documentation to see if it offers such a technique.)
+
+By itself a scriptlet does not generate HTML.  If a scriptlet wants to generate HTML, it can use a variable called "out".  This variable does not need to be declared.  It is already predefined for scriptlets, along with some other variables.  The following example shows how the scriptlet can generate HTML output.
+
+<HTML>
+<BODY>
+<%
+    // This scriptlet declares and initializes "date"
+    System.out.println( "Evaluating date now" );
+    java.util.Date date = new java.util.Date();
+%>
+Hello!  The time is now
+<%
+    // This scriptlet generates HTML output
+    out.println( String.valueOf( date ));
+%>
+</BODY>
+</HTML>
+
+Here, instead of using an expression, we are generating the HTML directly by printing to the "out" variable.  The "out" variable is of type javax.servlet.jsp.JspWriter.
+
+Another very useful pre-defined variable is "request".  It is of type javax.servlet.http.HttpServletRequest
+
+A "request" in server-side processing refers to the transaction between a browser and the server.  When someone clicks or enters a URL, the browser sends a "request" to the server for that URL, and shows the data returned.  As a part of this "request", various data is available, including the file the browser wants from the server, and if the request is coming from pressing a SUBMIT button, the information the user has entered in the form fields.
+
+The JSP "request" variable is used to obtain information from the request as sent by the browser.  For instance, you can find out the name of the client's host (if available, otherwise the IP address will be returned.)  Let us modify the code as shown:
+
+<HTML>
+<BODY>
+<%
+    // This scriptlet declares and initializes "date"
+    System.out.println( "Evaluating date now" );
+    java.util.Date date = new java.util.Date();
+%>
+Hello!  The time is now
+<%
+    out.println( date );
+    out.println( "<BR>Your machine's address is " );
+    out.println( request.getRemoteHost());
+%>
+</BODY>
+</HTML>
+
+A similar variable is "response".  This can be used to affect the response being sent to the browser.  For instance, you can call response.sendRedirect( anotherUrl ); to send a response to the browser that it should load a different URL.  This response will actualy go all the way to the browser.  The browser will then send a different request, to "anotherUrl".  This is a little different from some other JSP mechanisms we will come across, for including another page or forwarding the browser to another page.
+
+Exercise:  Write a JSP to output the entire line, "Hello!  The time is now ..." but use a scriptlet for the complete string, including the HTML tags.
+ 
+
+Next tutorial: Mixing scriptlets and HTML
+
+ Mixing Scriptlets and HTML
+We have already seen how to use the "out" variable to generate HTML output from within a scriptlet.  For more complicated HTML, using the out variable all the time loses some of the advantages of JSP programming.  It is simpler to mix scriptlets and HTML.
+
+Suppose you have to generate a table in HTML.  This is a common operation, and you may want to generate a table from a SQL table, or from the lines of a file.  But to keep our example simple, we will generate a table containing the numbers from 1 to N.  Not very useful, but it will show you the technique.
+
+Here is the JSP fragment to do it:
+
+<TABLE BORDER=2>
+<%
+    for ( int i = 0; i < n; i++ ) {
+        %>
+        <TR>
+        <TD>Number</TD>
+        <TD><%= i+1 %></TD>
+        </TR>
+        <%
+    }
+%>
+</TABLE>
+
+You would have to supply an int variable "n" before it will work, and then it will output a simple table with "n" rows.
+
+The important things to notice are how the %> and <% characters appear in the middle of the "for" loop, to let you drop back into HTML and then to come back to the scriptlet.
+
+The concepts are simple here -- as you can see, you can drop out of the scriptlets, write normal HTML, and get back into the scriptlet.  Any control expressions such as a "while" or a "for" loop or an "if" expression will control the HTML also.  If the HTML is inside a loop, it will be emitted once for each iteration of the loop.
+
+Another example of mixing scriptlets and HTML is shown below -- here it is assumed that there is a boolean variable named "hello" available.  If you set it to true, you will see one output, if you set it to false, you will see another output.
+
+<%
+    if ( hello ) {
+        %>
+        <P>Hello, world
+        <%
+    } else {
+        %>
+        <P>Goodbye, world
+        <%
+    }
+%>
+
+It is a little difficult to keep track of all open braces and scriptlet start and ends, but with a little practice and some good formatting discipline, you will acquire competence in doing it.
+
+Exercise:  Make the above examples work.  Write a JSP to output all the values returned by System.getProperties with "<BR>" embedded after each property name and value.  Do not output the "<BR>" using the "out" variable.
+ 
+
+Next tutorial: JSP Directives
+
+ JSP Directives
+We have been fully qualifying the java.util.Date in the examples in the previous sections.  Perhaps you wondered why we don't just import java.util.*;
+
+It is possible to use "import" statements in JSPs, but the syntax is a little different from normal Java.  Try the following example:
+
+<%@ page import="java.util.*" %>
+<HTML>
+<BODY>
+<%
+    System.out.println( "Evaluating date now" );
+    Date date = new Date();
+%>
+Hello!  The time is now <%= date %>
+</BODY>
+</HTML>
+
+The first line in the above example is called a "directive".  A JSP "directive" starts with <%@ characters.
+
+This one is a "page directive".  The page directive can contain the list of all imported packages.  To import more than one item, separate the package names by commas, e.g.
+
+<%@ page import="java.util.*,java.text.*" %>
+
+There are a number of JSP directives, besides the page directive.  Besides the page directives, the other most useful directives are include and taglib.  We will be covering taglib separately.
+
+The include directive is used to physically include the contents of another file.  The included file can be HTML or JSP or anything else -- the result is as if the original JSP file actually contained the included text.  To see this directive in action, create a new JSP
+
+<HTML>
+<BODY>
+Going to include hello.jsp...<BR>
+<%@ include file="hello.jsp" %>
+</BODY>
+</HTML>
+
+View this JSP in your browser, and you will see your original hello.jsp get included in the new JSP.
+
+Exercise:  Modify all your earlier exercises to import the java.util packages.
+ 
+
+Next tutorial: JSP Declarations
+
+ JSP Declarations
+The JSP you write turns into a class definition.  All the scriptlets you write are placed inside a single method of this class.
+
+You can also add variable and method declarations to this class.  You can then use these variables and methods from your scriptlets and expressions.
+
+To add a declaration, you must use the <%! and %> sequences to enclose your declarations, as shown below.
+
+<%@ page import="java.util.*" %>
+<HTML>
+<BODY>
+<%!
+    Date theDate = new Date();
+    Date getDate()
+    {
+        System.out.println( "In getDate() method" );
+        return theDate;
+    }
+%>
+Hello!  The time is now <%= getDate() %>
+</BODY>
+</HTML>
+
+The example has been created a little contrived, to show variable and method declarations.
+
+Here we are declaring a Date variable theDate, and the method getDate.  Both of these are available now in our scriptlets and expressions.
+
+But this example no longer works!  The date will be the same, no matter how often you reload the page.  This is because these are declarations, and will only be evaluated once when the page is loaded!  (Just as if you were creating a class and had variable initialization declared in it.)
+
+Exercise:  Modify the above example to add another function computeDate which re-initializes theDate.  Add a scriptlet that calls computeDate each time.
+
+Note: Now that you know how to do this -- it is in general not a good idea to use variables as shown here. The JSP usually will run as multiple threads of one single instance. Different threads would interfere with variable access, because it will be the same variable for all of them. If you do have to use variables in JSP, you should use synchronized access, but that hurts the performance. In general, any data you need should go either in the session object or the request object (these are introduced a little later) if passing data between different JSP pages. Variables you declare inside scriptlets are fine, e.g. <% int i = 45; %> because these are declared inside the local scope and are not shared.
+ 
+
+Next tutorial: JSP Tags
+
+ JSP Tags
+Another important syntax element of JSP are tags.  JSP tags do not use <%, but just the < character.  A JSP tag is somewhat like an HTML tag.  JSP tags can have a "start tag", a "tag body" and an "end tag".  The start and end tag both use the tag name, enclosed in < and > characters.  The end starts with a / character after the < character.  The tag names have an embedded colon character : in them, the part before the colon describes the type of the tag.  For instance:
+
+<some:tag>
+body
+</some:tag>
+
+If the tag does not require a body, the start and end can be conveniently merged together, as
+
+<some:tag/>
+
+Here by closing the start tag with a /> instead of > character, we are ending the tag immediately, and without a body.  (This syntax convention is the the same as XML.)
+
+Tags can be of two types: loaded from an external tag library, or predefined tags.   Predefined tags start with jsp: characters.  For instance, jsp:include is a predefined tag that is used to include other pages.
+
+We have already seen the include directive.  jsp:include is similar.  But instead of loading the text of the included file in the original file, it actually calls the included target at run-time (the way a browser would call the included target.  In practice, this is actually a simulated request rather than a full round-trip between the browser and the server).  Following is an example of jsp:include usage
+
+<HTML>
+<BODY>
+Going to include hello.jsp...<BR>
+<jsp:include page="hello.jsp"/>
+</BODY>
+</HTML>
+
+Try it and see what you get.  Now change the "jsp:include" to "jsp:forward" and see what is the difference.  These two predefined tags are frequently very useful.
+
+Exercise:  Write a JSP to do either a forward or an include, depending upon a boolean variable (hint:  The concepts of mixing HTML and scriptlets work with JSP tags also!)
+ 
+
+Next tutorial: JSP Sessions
+
+ JSP Sessions
+On a typical web site, a visitor might visit several pages and perform several interactions.
+
+If you are programming the site, it is very helpful to be able to associate some data with each visitor.  For this purpose, "session"s can be used in JSP.
+
+A session is an object associated with a visitor.  Data can be put in the session and retrieved from it, much like a Hashtable.  A different set of data is kept for each visitor to the site.
+
+Here is a set of pages that put a user's name in the session, and display it elsewhere.  Try out installing and using these.
+
+First we have a form, let us call it GetName.html
+
+<HTML>
+<BODY>
+<FORM METHOD=POST ACTION="SaveName.jsp">
+What's your name? <INPUT TYPE=TEXT NAME=username SIZE=20>
+<P><INPUT TYPE=SUBMIT>
+</FORM>
+</BODY>
+</HTML>
+
+The target of the form is "SaveName.jsp", which saves the user's name in the session.  Note the variable  "session".  This is another variable that is normally made available in JSPs, just like out and request variables.  (In the @page directive, you can indicate that you do not need sessions, in which case the "session" variable will not be made available.)
+
+<%
+   String name = request.getParameter( "username" );
+   session.setAttribute( "theName", name );
+%>
+<HTML>
+<BODY>
+<A HREF="NextPage.jsp">Continue</A>
+</BODY>
+</HTML>
+
+The SaveName.jsp saves the user's name in the session, and puts a link to another page, NextPage.jsp.
+
+NextPage.jsp shows how to retrieve the saved name.
+
+<HTML>
+<BODY>
+Hello, <%= session.getAttribute( "theName" ) %>
+</BODY>
+</HTML>
+
+If you bring up two different browsers (not different windows of the same browser), or run two browsers from two different machines, you can put one name in one browser and another name in another browser, and both names will be kept track of.
+
+The session is kept around until a timeout period.  Then it is assumed the user is no longer visiting the site, and the session is discarded.
+
+Exercise:  Add another attribute "age" to the above example.
+ 
+
+Next tutorial: Processing HTML Forms in JSP 	
+
+ Beans and Form processing
+Forms are a very common method of interactions in web sites.  JSP makes forms processing specially easy.
+
+The standard way of handling forms in JSP is to define a "bean".  This is not a full Java bean.  You just need to define a class that has a field corresponding to each field in the form.  The class fields must have "setters" that match the names of the form fields.  For instance, let us modify our GetName.html to also collect email address and age.
+
+The new version of GetName.html is
+
+<HTML>
+<BODY>
+<FORM METHOD=POST ACTION="SaveName.jsp">
+What's your name? <INPUT TYPE=TEXT NAME=username SIZE=20><BR>
+What's your e-mail address? <INPUT TYPE=TEXT NAME=email SIZE=20><BR>
+What's your age? <INPUT TYPE=TEXT NAME=age SIZE=4>
+<P><INPUT TYPE=SUBMIT>
+</FORM>
+</BODY>
+</HTML>
+
+To collect this data, we define a Java class with fields "username", "email" and "age" and we provide setter methods "setUsername", "setEmail" and "setAge", as shown.  A "setter" method is just a method that starts with "set" followed by the name of the field.  The first character of the field name is upper-cased.  So if the field is "email", its "setter" method will be "setEmail".  Getter methods are defined similarly, with "get" instead of "set".   Note that the setters  (and getters) must be public.
+
+
+package user;
+
+public class UserData {
+
+    String username;
+    String email;
+    int age;
+
+    public void setUsername( String value )
+    {
+        username = value;
+    }
+
+    public void setEmail( String value )
+    {
+        email = value;
+    }
+
+    public void setAge( int value )
+    {
+        age = value;
+    }
+
+    public String getUsername() { return username; }
+
+    public String getEmail() { return email; }
+
+    public int getAge() { return age; }
+
+}
+
+The method names must be exactly as shown.  Once you have defined the class, compile it and make sure it is available in the web-server's classpath.  The server may also define special folders where you can place bean classes, e.g. with Blazix you can place them in the "classes" folder.  If you have to change the classpath, the web-server would need to be stopped and restarted if it is already running.  (If you are not familiar with setting/changing classpath, see notes on changing classpath.)
+
+Note that we are using the package name user, therefore the file UserData.class must be placed in a folder named user under the classpath entry.
+
+Now let us change "SaveName.jsp" to use a bean to collect the data.
+
+<jsp:useBean id="user" class="user.UserData" scope="session"/>
+<jsp:setProperty name="user" property="*"/> 
+<HTML>
+<BODY>
+<A HREF="NextPage.jsp">Continue</A>
+</BODY>
+</HTML>
+
+All we need to do now is to add the jsp:useBean tag and the jsp:setProperty tag!  The useBean tag will look for an instance of the "user.UserData" in the session.  If the instance is already there, it will update the old instance.  Otherwise, it will create a new instance of user.UserData (the instance of the user.UserData is called a bean), and put it in the session.
+
+The setProperty tag will automatically collect the input data, match names against the bean method names, and place the data in the bean! 
+
+Let us modify NextPage.jsp to retrieve the data from bean..
+
+<jsp:useBean id="user" class="user.UserData" scope="session"/> 
+<HTML>
+<BODY>
+You entered<BR>
+Name: <%= user.getUsername() %><BR>
+Email: <%= user.getEmail() %><BR>
+Age: <%= user.getAge() %><BR>
+</BODY>
+</HTML>
+
+Notice that the same useBean tag is repeated.  The bean is available as the variable named "user" of class "user.UserData".  The data entered by the user is all collected in the bean.
+
+We do not actually need the "SaveName.jsp", the target of GetName.html could have been NextPage.jsp, and the data would still be available the same way as long as we added a jsp:setProperty tag.  But in the next tutorial, we will actually use SaveName.jsp as an error handler that automatically forwards the request to NextPage.jsp, or asks the user to correct the erroneous data.
+
+Exercise:  1)  Write a JSP/HTML set that allows a user to enter the name of a system property, and then displays the value returned by System.getProperty for that property name (handle errors appripriately.)   2)  Go back to the exercises where you manually modified boolean variables.  Instead of a boolean variable, make these come from a HIDDEN form field that can be set to true or false. 
+
+Next tutorial: Controllers
+
+ Controllers
+Sometimes, some pre-processing needs to be done after the user has submitted a form. The result of this pre-processing decides where the control flow should go next. Such pre-processing code is frequently referred to as a "controller".
+
+JSPs are very highly suited for writing simple controllers. For more complex controller logic, JSPs can easily call Java code in other classes. A sample controller is shown below:
+
+
+<jsp:useBean id="user" class="user.UserData" scope="session"/>
+<jsp:setProperty name="user" property="*"/> 
+<%
+    String tgtPage = null;
+    if ( user.choice.equals( "choice1" ))
+        tgtPage = "tgt1.jsp";
+    else if ( user.choice.equals( "choice2" ))
+        tgtPage = "tgt2.jsp";
+    else
+        tgtPage = "tgtDefault.jsp";
+     response.sendRedirect( tgtPage );
+%>
+
+Here we have a very simple code fragment, that is determining the next JSP to transfer control to. (Note that any output generated by this JSP would not actually be used, because the browser will be sent to a different location!)
+
+If the logic were more complicated, it could have been put in a regular Java class, and the JSP could have made calls into that Java class.
+
+Some frameworks use much more complicated mechanisms to do something as simple as this. For example, these complicated mechanisms may require configuration files which have to be changed for every change in call-flow, and may involve Java classes with particular complicated rules.
+
+But an objective review reveals that there is no actual advantage to these over-complicated mechanisms. They merely introduce many more places where things can and do go wrong.
+
+Sometimes, the desire to use these more complicated mechanisms arises from a misunderstanding - that JSPs are meant for display, therefore they can never be used when their output is not of interest. This is not correct.
+
+It is true that JSPs are primarily HTML with embedded code. However, they have many advantages, such as requiring less (typically none) configuration, and being easy to modify and deploy. Therefore they can lend themselves to other usages, such as writing simple and straightforward controllers. Ultimately, JSPs are just one tool in your toolbox. You should look at and evaluate each tool objectively, and put them to best advantage. That means using JSPs as controllers, as long as they provide the simplest and most effective means of doing that.
+
+
+Next tutorial: Tag Libraries
+
+ Tag libraries
+JSP 1.1 introduces a method of extending JSP tags, called "tag libraries".  These libraries allow addition of tags similar to jsp:include or jsp:forward, but with different prefixes other than jsp: and with additional features.
+
+To introduce you to tag libraries, in this tutorial we use the Blazix tag library as an example.  This tag library comes bundled with the Blazix server. If you are not using the Blazix Server, you may just want to review the material to get familiar with the syntax, and continue on to the next page.
+
+Each tag-library will have its own tag-library specific documentation.  In order to use the tag library, you use the "taglib" directive to specify where your tag library's "description" resides.  For the Blazix tag library,  the (recommended) directive is as follows
+
+<%@ taglib prefix="blx" uri="/blx.tld" %>
+
+The "uri" specifies where to find the tag library description.   The "prefix" is unique for the tag library.  This directive is saying that we will be using the tags in this library by starting them with blx:
+
+The Blazix tag library provides a blx:getProperty tag.  This tag can be used to allow the user to edit form data.  In our GetName.jsp file, we will now add a jsp:useBean and place the form inside blx:getProperty.
+
+The new GetName.jsp is
+
+<%@ taglib prefix="blx" uri="/blx.tld" %>
+<jsp:useBean id="user" class="user.UserData" scope="session"/>
+<HTML>
+<BODY>
+<blx:getProperty name="user" property="*">
+<FORM METHOD=POST ACTION="SaveName.jsp">
+What's your name? <INPUT TYPE=TEXT NAME=username SIZE=20><BR>
+What's your e-mail address? <INPUT TYPE=TEXT NAME=email SIZE=20><BR>
+What's your age? <INPUT TYPE=TEXT NAME=age SIZE=4>
+<P><INPUT TYPE=SUBMIT>
+</FORM>
+</blx:getProperty>
+</BODY>
+</HTML>
+
+Note that the blx:getProperty doesn't end with /> but is instead terminated by a separate </blx:getProperty> line.  This puts all the form input fields inside the blx:getProperty so they can be appropriately modified by the tag library.
+
+Try putting a link to GetName.jsp from the NextPage.jsp, and you will see that the bean's data shows up automatically in the input fields.
+
+The user can now edit the data.
+
+We still have a couple of problems.  The user cannot clear out the name field.  Moreover, if the user enters a bad item in the "age" field, something which is not a valid integer, a Java exception occurs.
+
+We will use another tag from the Blazix tag library to take care of this.  Blazix offers a blx:setProperty tag that can be used to take care of these problems.  blx:setProperty allows us to define an exception handler method.  If an exception occurs, we can collect an error message for the user and continue processing.
+
+Following is a version of SaveName.jsp that processes any errors, and either shows the user GetName.jsp again to user can enter the data correctly, or automatically forwards to NextPage.jsp.
+
+<%@ taglib prefix="blx" uri="/blx.tld" %>
+<%!
+    boolean haveError;
+    StringBuffer errors;
+
+    public void errorHandler( String field,
+                              String value,
+                              Exception ex )
+    {
+        haveError = true;
+        if ( errors == null )
+            errors = new StringBuffer();
+        else
+            errors.append( "<P>" );
+        errors.append( "<P>Value for field \"" +
+                     field + "\" is invalid." );
+        if ( ex instanceof java.lang.NumberFormatException )
+            errors.append( " The value must be a number." );
+    }
+%>
+<%
+    // Variables must be initialized outside declaration!
+    haveError = false;
+    errors = null;
+%>
+<HTML>
+<BODY>
+<jsp:useBean id="user" class="user.UserData" scope="session"/>
+<blx:setProperty name="user"
+     property="*" 
+     onError="errorHandler"/> 
+<%
+    if ( haveError ) {
+        out.println( errors.toString());
+        pageContext.include( "GetName.jsp" );
+    } else
+        pageContext.forward( "NextPage.jsp" );
+%>
+</BODY>
+</HTML>
+
+Note that haveError and errors must be re-initialized each time, therefore they are being initialized outside of the declaration.
+
+[Also notice the use of pageContext.include and pageContext.forward.  These are like jsp:include and jsp:forward, but are more convenient to use from within Java blocks.   pageContext is another pre-defined variable that makes it easy to do certain operations from within Java blocks.]
+
+Here, if an error occurs during the processing of blx:setProperty, we display the error and then include the GetName.jsp again so user can correct the error.  If no errors occur, we automatically forward the user to NextPage.jsp.
+
+There is still a problem with the forms, the "age" shows up as zero initially rather than being empty.  This can be fixed by adding "emptyInt=0" to both the blx:getProperty and blx:setProperty tags (bean fields should be initialized to 0.)   It happens that "0" is not a valid value for age, so we can use "0" to mark empty strings.  If "0" were a valid value for age, we could have added "emptyInt=-1" (and made sure to initialize the bean fields to -1.)
+
+Another small problem is that the "<HTML>" tag gets doubled if there is an error and we end up including "GetName.jsp".  A more elegant solution is to remove the out.println, and pass back the error as shown
+
+<%
+    if ( haveError ) {
+        request.setAttribute( "errors",
+                 errors.toString());
+        pageContext.forward( "GetName.jsp" );
+    } else
+        pageContext.forward( "NextPage.jsp" );
+%>
+
+We can then do a "request.getAttribute" in the GetName.jsp, and if the returned value is non-null, display the error. 
+ 
+
+Next Tutorial: Editing forms without a tag library
+
+ Techniques for form editing
+A tag library such as the one that comes with the Blazix server, may not be available in your environment.  How can you allow similar features without using a tag library?
+
+It is a little tedious, but it can be done.  Basically, you must edit each HTML tag yourself, and put in a default value.  The following examples shows how we modify GetName.jsp to provide features similar to blx:getProperty but with manual HTML tag editing:
+
+<jsp:useBean id="user" class="user.UserData" scope="session"/>
+<HTML>
+<BODY>
+<FORM METHOD=POST ACTION="SaveName.jsp">
+What's your name? <INPUT TYPE=TEXT NAME=username
+         SIZE=20 VALUE="<%= user.getUsername() %>"><BR>
+What's your e-mail address? <INPUT TYPE=TEXT
+         NAME=email SIZE=20
+         VALUE="<%= user.getEmail() %>"><BR>
+What's your age? <INPUT TYPE=TEXT NAME=age
+         SIZE=4 VALUE=<%= user.getAge() %>>
+<P><INPUT TYPE=SUBMIT>
+</FORM>
+</BODY>
+</HTML>
+
+As you can see, this simply involves adding a "VALUE" field in the INPUT tags, and initializing the field with an expression!
+
+To handle exceptions during input processing, a simple approach is to use "String" fields in the bean, and do the conversion to the target datatype yourself.  This will allow you to handle exceptions.
+ 
+
+Adding a log-in feature to your pages
+
+ Protecting your website with a login page
+Some sites require that all users log-in using a username and password, before being able to visit any page.
+
+This can be done using JSP sessions or servlets, and in fact this was a common technique for a while.  But starting with a new release of Servlets specifications (2.2) from Sun, this feature is now very simple to implement.  
+
+It is no longer necessary to use JSP techniques to provide login/password protection, but it is still a very common requirement of web-sites, therefore a brief overview is provided here.
+
+To password-protect your site, you just need to design a login page.  This page can be as simple or complicated as you need it to be.  It must contain a <FORM> tag, with the METHOD set to POST and the ACTION set to "j_security_check".
+
+<FORM METHOD=POST ACTION=j_security_check>
+
+The target j_security_check is provided by the application server, and does not need to be coded.
+
+The form must contain two <INPUT> fields, named j_username and j_password respectively for the username and password.  Typically, the username field will be a TEXT input field, and the password field will be a PASSWORD input field.
+
+After this, you must tell your application server to password protect your pages using the login page you have provided.  The details will vary from server to server, but a good implementation will provide you hooks that you can use, for example, to match usernames and passwords against a database.  (E.g., in Blazix you can supply an implementation of the interface desisoft.deploy.AuthCheck to check usernames and passwords against a database or other sources.)
+ 
+Conclusion: Material for further learning
+

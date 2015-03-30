@@ -1,0 +1,76 @@
+<html><head>
+   <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+   <meta name="GENERATOR" content="Mozilla/4.75 [en] (Win98; U) [Netscape]">
+   <meta name="Description" content="JSP Tutorial">
+   <meta name="Keywords" content="JSP Tutorial">
+   <title>JSP Tutorial</title>
+</head>
+<body>
+<table cellpadding="0" cellspacing="0" cols="1" width="100%" border="0">
+<tbody><tr>
+<td>
+<center>
+<font size="+3"><b>JSP Tutorial</b></font>
+<br>
+		</center>
+</td>
+</tr>
+
+<tr>
+<td>
+<h2>
+Techniques for form editing</h2>
+A tag library such as the one that comes with the <a href="http://www.blazix.com/blazixserver.html" target="_new">Blazix
+server</a>, may not be available in your environment.&nbsp; How can you
+allow similar features without using a tag library?
+<p>It is a little tedious, but it can be done.&nbsp; Basically, you must
+edit each HTML tag yourself, and put in a default value.&nbsp; The following
+examples shows how we modify GetName.jsp to provide features similar to
+<tt>blx:getProperty</tt>
+but with manual HTML tag editing:
+</p><pre><tt>&lt;jsp:useBean id="user" class="user.UserData" scope="session"/&gt;
+&lt;HTML&gt;
+&lt;BODY&gt;
+&lt;FORM METHOD=POST ACTION="SaveName.jsp"&gt;
+What's your name? &lt;INPUT TYPE=TEXT NAME=username
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SIZE=20 VALUE="&lt;%= user.getUsername() %&gt;"&gt;&lt;BR&gt;
+What's your e-mail address? &lt;INPUT TYPE=TEXT
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; NAME=email SIZE=20
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; VALUE="&lt;%= user.getEmail() %&gt;"&gt;&lt;BR&gt;
+What's your age? &lt;INPUT TYPE=TEXT NAME=age
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SIZE=4 VALUE=&lt;%= user.getAge() %&gt;&gt;
+&lt;P&gt;&lt;INPUT TYPE=SUBMIT&gt;
+&lt;/FORM&gt;
+&lt;/BODY&gt;
+&lt;/HTML&gt;</tt></pre>
+As you can see, this simply involves adding a "VALUE" field in the INPUT
+tags, and initializing the field with an expression!
+<p>To handle exceptions during input processing, a simple approach is to
+use "<tt>String</tt>" fields in the bean, and do the conversion to the
+target datatype yourself.&nbsp; This will allow you to handle exceptions.
+<!--
+<p><i>Exercise:</i>&nbsp; Modify the earlier example to do everything without
+the Blazix tag library (you can restrict this to only one field.)
+-->
+<br>&nbsp;</p></td>
+</tr>
+
+<tr>
+<td>
+<center><!-- jsp:include page="/header.jsp"/ --></center>
+<br>
+<table cellpadding="0" cellspacing="0" width="100%" border="0">
+<tbody><tr>
+<td><a href="14.html">Adding a log-in feature to your pages</a></td>
+
+<td>
+<div align="right"><font size="-1"><a href="index.html#contents">Contents</a></font></div>
+</td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+</tbody></table>
+
+
+</body></html>

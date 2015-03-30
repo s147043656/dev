@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html><head>
+   <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+   <meta name="GENERATOR" content="Mozilla/4.75 [en] (Win98; U) [Netscape]">
+   <meta name="Description" content="JSP Tutorial">
+   <meta name="Keywords" content="JSP Tutorial">
+   <title>JSP Tutorial</title>
+</head>
+<body>
+&nbsp;
+<table cellpadding="0" cellspacing="0" cols="1" width="100%" border="0">
+<tbody><tr>
+<td>
+<center><b><font size="+3">JSP Tutorial</font></b>
+<br>
+		</center>
+</td>
+</tr>
+
+<tr>
+<td>
+<h2>
+Protecting your website with a login page</h2>
+Some sites require that all users log-in using a username and password,
+before being able to visit any page.
+<p>This can be done using JSP sessions or servlets, and in fact this was
+a common technique for a while.&nbsp; But starting with a new release of
+Servlets specifications (2.2) from Sun, this feature is now very simple
+to implement.&nbsp;&nbsp;
+</p><p>It is no longer necessary to use JSP techniques to provide login/password
+protection, but it is still a very common requirement of web-sites, therefore
+a brief overview is provided here.
+</p><p>To password-protect your site, you just need to design a login page.&nbsp;
+This page can be as simple or complicated as you need it to be.&nbsp; It
+must contain a <tt>&lt;FORM&gt;</tt> tag, with the <tt>METHOD</tt> set to
+<tt>POST</tt> and the <tt>ACTION</tt> set to "<tt>j_security_check</tt>".<tt></tt>
+</p><p><tt>&lt;FORM METHOD=POST ACTION=j_security_check&gt;</tt>
+</p><p>The target <tt>j_security_check</tt> is provided by the application
+server, and does not need to be coded.
+</p><p>The form must contain two <tt>&lt;INPUT&gt;</tt> fields, named <tt>j_username</tt>
+and <tt>j_password</tt> respectively for the username and password.&nbsp;
+Typically, the username field will be a <tt>TEXT</tt> input field, and
+the password field will be a <tt>PASSWORD</tt> input field.
+</p><p>After this, you must tell your application server to password protect
+your pages using the login page you have provided.&nbsp; The details will
+vary from server to server, but a good implementation will provide you
+hooks that you can use, for example, to match usernames and passwords against
+a database.&nbsp; (E.g., in Blazix you can supply an implementation of
+the interface <tt>desisoft.deploy.AuthCheck</tt> to check usernames and
+passwords against a database or other sources.)
+<!--
+<p><i>Exercise:</i>&nbsp; Read your application server's documentation
+and add login/password protection to some of your JSPs.
+-->
+<br>&nbsp;</p></td>
+</tr>
+
+<tr>
+<td>
+<center><!-- jsp:include page="/header.jsp"/ --></center>
+
+<table cellpadding="0" cellspacing="0" width="100%" border="0">
+<tbody><tr>
+<!--
+<td><a href="Sql.jsp">Next Tutorial: Using SQL in JSP pages</a></td>
+-->
+<td><a href="15.html">Conclusion: Material for further learning</a></td>
+
+<td>
+<div align="right"><font size="-1"><a href="index.html#contents">Contents</a></font></div>
+</td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+</tbody></table>
+
+
+
+</body></html>

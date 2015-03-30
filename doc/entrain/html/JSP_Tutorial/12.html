@@ -1,0 +1,176 @@
+<!DOCTYPE html PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html><head>
+   <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+   <meta name="GENERATOR" content="Mozilla/4.75 [en] (Win98; U) [Netscape]">
+   <meta name="Description" content="JSP Tutorial">
+   <meta name="Keywords" content="JSP Tutorial">
+   <title>JSP Tutorial</title>
+</head>
+<body>
+<table cellpadding="0" cellspacing="0" cols="1" width="100%" border="0">
+<tbody><tr>
+<td>
+<center>
+<font size="+3"><b>JSP Tutorial</b></font>
+<br>
+		</center>
+</td>
+</tr>
+
+<tr>
+<td>
+<h2>
+Tag libraries</h2>
+JSP 1.1 introduces a method of extending JSP tags, called "tag libraries".&nbsp;
+These libraries allow addition of tags similar to <tt>jsp:include</tt>
+or <tt>jsp:forward</tt>, but with different prefixes other than <tt>jsp:</tt>
+and with additional features.
+<p>To introduce you to tag libraries, in this tutorial we use the Blazix
+tag library as an example.&nbsp; This tag library comes bundled with the
+<a href="http://www.blazix.com/blazixserver.html" target="_new">Blazix
+server</a>.  If you are not using the Blazix Server, you may just want
+to review the material to get familiar with the syntax,
+and continue on to the next page.
+</p><p>Each tag-library will have its own tag-library specific documentation.&nbsp;
+In order to use the tag library, you use the "taglib" directive to specify
+where your tag library's "description" resides.&nbsp; For the Blazix tag
+library,&nbsp; the (recommended) directive is as follows
+</p><pre><tt>&lt;%@ taglib prefix="blx" uri="/blx.tld" %&gt;</tt></pre>
+The "uri" specifies where to find the tag library description.&nbsp;&nbsp;
+The "prefix" is unique for the tag library.&nbsp; This directive is saying
+that we will be using the tags in this library by starting them with <b><tt>blx:</tt></b>
+<p>The Blazix tag library provides a blx:getProperty tag.&nbsp; This tag
+can be used to allow the user to edit form data.&nbsp; In our GetName.jsp
+file, we will now add a jsp:useBean and place the form inside blx:getProperty.
+</p><p>The new GetName.jsp is
+</p><pre><tt>&lt;%@ taglib prefix="blx" uri="/blx.tld" %&gt;
+&lt;jsp:useBean id="user" class="user.UserData" scope="session"/&gt;
+&lt;HTML&gt;
+&lt;BODY&gt;
+&lt;blx:getProperty name="user" property="*"&gt;
+&lt;FORM METHOD=POST ACTION="SaveName.jsp"&gt;
+What's your name? &lt;INPUT TYPE=TEXT NAME=username SIZE=20&gt;&lt;BR&gt;
+What's your e-mail address? &lt;INPUT TYPE=TEXT NAME=email SIZE=20&gt;&lt;BR&gt;
+What's your age? &lt;INPUT TYPE=TEXT NAME=age SIZE=4&gt;
+&lt;P&gt;&lt;INPUT TYPE=SUBMIT&gt;
+&lt;/FORM&gt;
+&lt;/blx:getProperty&gt;
+&lt;/BODY&gt;
+&lt;/HTML&gt;</tt></pre>
+Note that the blx:getProperty doesn't end with /&gt; but is instead terminated
+by a separate &lt;/blx:getProperty&gt; line.&nbsp; This puts all the form
+input fields inside the blx:getProperty so they can be appropriately modified
+by the tag library.
+<p>Try putting a link to GetName.jsp from the NextPage.jsp, and you will
+see that the bean's data shows up automatically in the input fields.
+</p><p>The user can now edit the data.
+</p><p>We still have a couple of problems.&nbsp; The user cannot clear out
+the name field.&nbsp; Moreover, if the user enters a bad item in the "age"
+field, something which is not a valid integer, a Java exception occurs.
+</p><p>We will use another tag from the Blazix tag library to take care of
+this.&nbsp; Blazix offers a blx:setProperty tag that can be used to take
+care of these problems.&nbsp;<tt> blx:setProperty</tt> allows us to define
+an exception handler method.&nbsp; If an exception occurs, we can collect
+an error message for the user and continue processing.
+</p><p>Following is a version of SaveName.jsp that processes any errors, and
+either shows the user GetName.jsp again to user can enter the data correctly,
+or automatically forwards to NextPage.jsp.
+</p><pre>&lt;%@ taglib prefix="blx" uri="/blx.tld" %&gt;
+&lt;%!
+&nbsp;&nbsp;&nbsp; boolean haveError;
+&nbsp;&nbsp;&nbsp; StringBuffer errors;
+
+&nbsp;&nbsp;&nbsp; public void errorHandler( String field,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String value,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Exception ex )
+&nbsp;&nbsp;&nbsp; {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; haveError = true;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if ( errors == null )
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; errors = new StringBuffer();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; errors.append( "&lt;P&gt;" );
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; errors.append( "&lt;P&gt;Value for field \"" +
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; field + "\" is invalid." );
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if ( ex instanceof java.lang.NumberFormatException )
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; errors.append( " The value must be a number." );
+&nbsp;&nbsp;&nbsp; }
+%&gt;
+&lt;%
+&nbsp;&nbsp;&nbsp; // Variables must be initialized outside declaration!
+&nbsp;&nbsp;&nbsp; haveError = false;
+&nbsp;&nbsp;&nbsp; errors = null;
+%&gt;
+&lt;HTML&gt;
+&lt;BODY&gt;
+&lt;jsp:useBean id="user" class="user.UserData" scope="session"/&gt;
+&lt;blx:setProperty name="user"
+&nbsp;&nbsp;&nbsp;&nbsp; property="*"&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp; onError="errorHandler"/&gt;&nbsp;
+&lt;%
+&nbsp;&nbsp;&nbsp; if ( haveError ) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; out.println( errors.toString());
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; pageContext.include( "GetName.jsp" );
+&nbsp;&nbsp;&nbsp; } else
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; pageContext.forward( "NextPage.jsp" );
+%&gt;
+&lt;/BODY&gt;
+&lt;/HTML&gt;</pre>
+Note that <tt>haveError</tt> and <tt>errors</tt> must be re-initialized
+each time, therefore they are being initialized outside of the declaration.
+<p>[Also notice the use of <tt>pageContext.include</tt> and <tt>pageContext.forward</tt>.&nbsp;
+These are like <tt>jsp:include</tt> and <tt>jsp:forward</tt>, but are more
+convenient to use from within Java blocks.&nbsp;&nbsp; p<tt>ageContext</tt>
+is another pre-defined variable that makes it easy to do certain operations
+from within Java blocks.]
+</p><p>Here, if an error occurs during the processing of <tt>blx:setProperty</tt>,
+we display the error and then include the <tt>GetName.jsp</tt> again so
+user can correct the error.&nbsp; If no errors occur, we automatically
+forward the user to <tt>NextPage.jsp</tt>.
+</p><p>There is still a problem with the forms, the "age" shows up as zero
+initially rather than being empty.&nbsp; This can be fixed by adding "<tt>emptyInt=0"</tt>
+to both the <tt>blx:getProperty</tt> and <tt>blx:setProperty</tt> tags
+(bean fields should be initialized to 0.)&nbsp;&nbsp; It happens that "0"
+is not a valid value for age, so we can use "0" to mark empty strings.&nbsp;
+If "0" were a valid value for age, we could have added "<tt>emptyInt=-1</tt>"
+(and made sure to initialize the bean fields to -1.)
+</p><p>Another small problem is that the "&lt;HTML&gt;" tag gets doubled if there
+is an error and we end up including "GetName.jsp".&nbsp; A more elegant
+solution is to remove the out.println, and pass back the error as shown
+</p><pre>&lt;%
+&nbsp;&nbsp;&nbsp; if ( haveError ) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; request.setAttribute( "errors",
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; errors.toString());
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; pageContext.forward( "GetName.jsp" );
+&nbsp;&nbsp;&nbsp; } else
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; pageContext.forward( "NextPage.jsp" );
+%&gt;</pre>
+We can then do a "<tt>request.getAttribute</tt>" in the <tt>GetName.jsp</tt>,
+and if the returned value is non-null, display the error.&nbsp;
+<!-- This is
+left as an exercise.
+<p><i>Exercise:</i>&nbsp; Read the documentation on Blazix or
+another tag library, and use some tags from this library.
+-->
+<br>&nbsp;</td>
+</tr>
+
+<tr>
+<td>
+<center><!-- jsp:include page="/header.jsp"/ --></center>
+<br>
+<table cellpadding="0" cellspacing="0" width="100%" border="0">
+<tbody><tr>
+<td><a href="13.html">Next Tutorial: Editing forms without a tag library</a></td>
+
+<td>
+<div align="right"><font size="-1"><a href="index.html#contents">Contents</a></font></div>
+</td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+</tbody></table>
+
+
+
+</body></html>

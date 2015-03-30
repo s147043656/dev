@@ -1,0 +1,55 @@
+### SHELL COMMANDS
+
+# Full database dump
+mysqldump -uroot -p entraindb  > entraindb.sql
+
+# DDL database dump
+mysqldump -uroot -p --no-data entraindb > entraindb_ddl.sql
+
+# DDL table dump
+mysqldump -uroot -p entraindb words --no-data > 000.sql
+
+# Table data only dump (with miltiple INSERT)
+mysqldump -uroot -p entraindb words  --no-create-db --no-create-info --compact --extended-insert=FALSE > 001.sql
+
+
+### MySQL commands
+
+> Create database "entraindb" with default encoding "utf8"
+create database entraindb default character set = utf8;
+
+> Create table
+create table partsofspeech (PartID integer (1) auto_increment primary key, POSName varchar (32));
+
+> Rename table "partsofspeech" to "pos"
+rename table partsofspeech to pos
+
+> Add new column "enwsyn" into table "words":
+alter table words add enwsyn varchar (255);
+
+> Rename column "wnum" to "woid"
+alter table words change wnum woid integer (10);
+
+> Delete cloumn "pos_del" from table "words"
+alter table words drop pos_del;
+
+> Change type "char (32)" to "varchar (255)" for column "enw"
+alter table words change enw enw varchar (255);
+
+> Set column "woid" as primary key
+alter table words add primary key (woid);
+
+> Set autoincrement for primary key in column "woid"
+alter table words modify woid int auto_increment;
+
+> Add new word:
+INSERT INTO words SET enw = 'affair', uaw = 'справа';
+
+> Modify column id (primary key) to use type int(12) and auto_increment
+alter table words modify column id INT(12)  AUTO_INCREMENT;
+
+> Add new column with name irverbs and type varchar(255)
+alter table words add column irverbs varchar(255) default null;
+
+> Rename column irverbs to irvp and change type to varchar(32)
+alter table words change irverbs irvp varchar(32);

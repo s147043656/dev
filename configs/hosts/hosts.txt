@@ -1,0 +1,8 @@
+127.0.1.1 u1204
+127.0.1.1 u1204.vtdomain
+127.0.0.1 tomcat.u1204.vtdomain
+127.0.0.1 tc.u1204.vtdomain
+127.0.0.1 jenkins.u1204.vtdomain
+127.0.0.1 nexus.u1204.vtdomain
+127.0.0.1 entrain.u1204.vtdomain
+127.0.0.1 hotel.u1204.vtdomain

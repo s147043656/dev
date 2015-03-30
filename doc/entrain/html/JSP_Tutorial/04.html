@@ -1,0 +1,138 @@
+<!DOCTYPE html PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html><head>
+   <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+   <meta name="GENERATOR" content="Mozilla/4.75 [en] (Win98; U) [Netscape]">
+   <meta name="Description" content="JSP Tutorial">
+   <meta name="Keywords" content="JSP Tutorial">
+   <title>JSP Tutorial</title>
+</head>
+<body>
+<table cellpadding="0" cellspacing="0" cols="1" width="100%" border="0">
+<tbody><tr>
+<td>
+<center>
+<font size="+3"><b>JSP Tutorial</b></font>
+<br>
+</center>
+</td>
+</tr>
+
+<tr>
+<td>
+<h2>
+Scriptlets</h2>
+We have already seen how to embed Java expressions in JSP pages by putting
+them between the <b><tt>&lt;%=</tt></b> and <b><tt>%&gt;</tt></b> character
+sequences.
+<p>But it is difficult to do much programming just by putting Java expressions
+inside HTML.
+</p><p>JSP also allows you to write blocks of Java code inside the JSP.&nbsp;
+You do this by placing your Java code between <b><tt>&lt;%</tt></b> and
+<b><tt>%&gt;</tt></b>
+characters (just like expressions, but without the <b><tt>=</tt></b> sign
+at the start of the sequence.)
+</p><p>This block of code is known as a "scriptlet".&nbsp; By itself, a scriptlet
+doesn't contribute any HTML (though it can, as we will see down below.)&nbsp;
+A scriptlet contains Java code that is executed every time the JSP is invoked.&nbsp;
+</p><p>Here is a modified version of our JSP from previous section, adding
+in a scriptlet.
+</p><pre>&lt;HTML&gt;
+&lt;BODY&gt;
+&lt;%
+&nbsp;&nbsp;&nbsp; // This is a scriptlet.&nbsp; Notice that the "date"
+&nbsp;&nbsp;&nbsp; // variable we declare here is available in the
+&nbsp;&nbsp;&nbsp; // embedded expression later on.
+&nbsp;&nbsp;&nbsp; System.out.println( "Evaluating date now" );
+&nbsp;&nbsp;&nbsp; java.util.Date date = new java.util.Date();
+%&gt;
+Hello!&nbsp; The time is now &lt;%= date %&gt;
+&lt;/BODY&gt;
+&lt;/HTML&gt;</pre>
+If you run the above example, you will notice the output from the "<tt>System.out.println</tt>"
+on the server log.&nbsp; This is a convenient way to do simple debugging
+(some servers also have techniques of debugging the JSP in the IDE.&nbsp;
+See your server's documentation to see if it offers such a technique.)
+<p>By itself a scriptlet does not generate HTML.&nbsp; If a scriptlet wants
+to generate HTML, it can use a variable called "<tt>out</tt>".&nbsp; This
+variable does not need to be declared.&nbsp; It is already predefined for
+scriptlets, along with some other variables.&nbsp; The following example
+shows how the scriptlet can generate HTML output.
+</p><pre>&lt;HTML&gt;
+&lt;BODY&gt;
+&lt;%
+&nbsp;&nbsp;&nbsp; // This scriptlet declares and initializes "date"
+&nbsp;&nbsp;&nbsp; System.out.println( "Evaluating date now" );
+&nbsp;&nbsp;&nbsp; java.util.Date date = new java.util.Date();
+%&gt;
+Hello!&nbsp; The time is now
+&lt;%
+&nbsp;&nbsp;&nbsp; // This scriptlet generates HTML output
+&nbsp;&nbsp;&nbsp; out.println( String.valueOf( date ));
+%&gt;
+&lt;/BODY&gt;
+&lt;/HTML&gt;</pre>
+Here, instead of using an expression, we are generating the HTML directly
+by printing to the "<tt>out</tt>" variable.&nbsp; The "<tt>out</tt>" variable
+is of type <tt><a href="http://java.sun.com/products/servlet/2.2/javadoc/javax/servlet/jsp/JspWriter.html">javax.servlet.jsp.JspWriter</a>.</tt>
+<p>Another very useful pre-defined variable is "<tt>request</tt>".&nbsp;
+It is of type <tt><a href="http://java.sun.com/products/servlet/2.1/api/javax.servlet.http.HttpServletRequest.html">javax.servlet.http.HttpServletRequest</a></tt>
+</p><p>A "request" in server-side processing refers to the transaction between
+a browser and the server.&nbsp; When someone clicks or enters a URL, the
+browser sends a "request" to the server for that URL, and shows the data
+returned.&nbsp; As a part of this "request", various data is available,
+including the file the browser wants from the server, and if the request
+is coming from pressing a SUBMIT button, the information the user has entered
+in the form fields.
+</p><p>The JSP "<tt>request</tt>" variable is used to obtain information from
+the request as sent by the browser.&nbsp; For instance, you can find out
+the name of the client's host (if available, otherwise the IP address will
+be returned.)&nbsp; Let us modify the code as shown:
+</p><pre>&lt;HTML&gt;
+&lt;BODY&gt;
+&lt;%
+&nbsp;&nbsp;&nbsp; // This scriptlet declares and initializes "date"
+&nbsp;&nbsp;&nbsp; System.out.println( "Evaluating date now" );
+&nbsp;&nbsp;&nbsp; java.util.Date date = new java.util.Date();
+%&gt;
+Hello!&nbsp; The time is now
+&lt;%
+&nbsp;&nbsp;&nbsp; out.println( date );
+&nbsp;&nbsp;&nbsp; out.println( "&lt;BR&gt;Your machine's address is " );
+&nbsp;&nbsp;&nbsp; out.println( request.getRemoteHost());
+%&gt;
+&lt;/BODY&gt;
+&lt;/HTML&gt;</pre>
+A similar variable is "response".&nbsp; This can be used to affect the
+response being sent to the browser.&nbsp; For instance, you can call <tt>response.sendRedirect(
+anotherUrl ); </tt>to send a response to the browser that it should load
+a different URL.&nbsp; This response will actualy go all the way to the
+browser.&nbsp; The browser will then send a different request, to "<tt>anotherUrl</tt>".&nbsp;
+This is a little different from some other JSP mechanisms we will come
+across, for including another page or forwarding the browser to another
+page.
+<p><i>Exercise:</i>&nbsp; Write a JSP to output the entire line, "Hello!&nbsp;
+The time is now ..." but use a scriptlet for the complete string, including
+the HTML tags.
+<br>&nbsp;</p></td>
+</tr>
+
+<tr>
+<td>
+<center><!-- jsp:include page="/header.jsp"/ --></center>
+<br>
+<table cellpadding="0" cellspacing="0" width="100%" border="0">
+<tbody><tr>
+<td><a href="05.html">Next tutorial: Mixing scriptlets and HTML</a></td>
+
+<td>
+<div align="right"><font size="-1"><a href="index.html#contents">Contents</a></font></div>
+</td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+</tbody></table>
+
+
+
+</body></html>

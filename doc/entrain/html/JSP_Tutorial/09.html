@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html><head>
+   <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+   <meta name="GENERATOR" content="Mozilla/4.75 [en] (Win98; U) [Netscape]">
+   <meta name="Description" content="JSP Tutorial">
+   <meta name="Keywords" content="JSP Tutorial">
+   <title>JSP Tutorial</title>
+</head>
+<body>
+<table cellpadding="0" cellspacing="0" cols="1" width="100%" border="0">
+<tbody><tr>
+<td>
+<center>
+<font size="+3"><b>JSP Tutorial</b></font>
+<br>
+		</center>
+</td>
+</tr>
+
+<tr>
+<td>
+<h2>
+JSP Sessions</h2>
+On a typical web site, a visitor might visit several pages and perform
+several interactions.
+<p>If you are programming the site, it is very helpful to be able to associate
+some data with each visitor.&nbsp; For this purpose, "<tt>session</tt>"s
+can be used in JSP.
+</p><p>A session is an object associated with a visitor.&nbsp; Data can be
+put in the session and retrieved from it, much like a Hashtable.&nbsp;
+A different set of data is kept for each visitor to the site.
+</p><p>Here is a set of pages that put a user's name in the session, and display
+it elsewhere.&nbsp; Try out installing and using these.
+</p><p>First we have a form, let us call it GetName.html
+</p><pre><tt>&lt;HTML&gt;
+&lt;BODY&gt;
+&lt;FORM METHOD=POST ACTION="SaveName.jsp"&gt;
+What's your name? &lt;INPUT TYPE=TEXT NAME=username SIZE=20&gt;
+&lt;P&gt;&lt;INPUT TYPE=SUBMIT&gt;
+&lt;/FORM&gt;
+&lt;/BODY&gt;
+&lt;/HTML&gt;</tt></pre>
+The target of the form is "SaveName.jsp", which saves the user's name in
+the session.&nbsp; Note the variable&nbsp; "<tt>session</tt>".&nbsp; This
+is another variable that is normally made available in JSPs, just like
+<tt>out</tt>
+and <tt>request</tt> variables.&nbsp; (In the @page directive, you can
+indicate that you do not need sessions, in which case the "session" variable
+will not be made available.)
+<pre>&lt;%
+&nbsp;&nbsp; String name = request.getParameter( "username" );
+&nbsp;&nbsp; session.setAttribute( "theName", name );
+%&gt;
+&lt;HTML&gt;
+&lt;BODY&gt;
+&lt;A HREF="NextPage.jsp"&gt;Continue&lt;/A&gt;
+&lt;/BODY&gt;
+&lt;/HTML&gt;</pre>
+The SaveName.jsp saves the user's name in the session, and puts a link
+to another page, NextPage.jsp.
+<p>NextPage.jsp shows how to retrieve the saved name.
+</p><pre>&lt;HTML&gt;
+&lt;BODY&gt;
+Hello, &lt;%= session.getAttribute( "theName" ) %&gt;
+&lt;/BODY&gt;
+&lt;/HTML&gt;</pre>
+If you bring up two different browsers (not different windows of the same
+browser), or run two browsers from two different machines, you can put
+one name in one browser and another name in another browser, and both names
+will be kept track of.
+<p>The session is kept around until a timeout period.&nbsp; Then it is
+assumed the user is no longer visiting the site, and the session is discarded.
+</p><p><i>Exercise:</i>&nbsp; Add another attribute "age" to the above example.
+<br>&nbsp;
+</p><center><!-- jsp:include page="/header.jsp"/ --></center>
+<br>
+<table cellpadding="0" cellspacing="0" width="100%" border="0">
+<tbody><tr>
+<td><a href="10.html">Next tutorial: Processing HTML Forms in JSP</a></td>
+
+<td>
+<div align="right"><font size="-1"><a href="index.html#contents">Contents</a></font></div>
+</td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+
+<tr>
+<td></td>
+</tr>
+</tbody></table>
+
+
+
+</body></html>

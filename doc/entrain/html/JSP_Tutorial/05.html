@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html><head>
+   <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+   <meta name="GENERATOR" content="Mozilla/4.75 [en] (Win98; U) [Netscape]">
+   <meta name="Description" content="JSP Tutorial">
+   <meta name="Keywords" content="JSP Tutorial">
+   <title>JSP Tutorial</title>
+</head>
+<body>
+<table cellpadding="0" cellspacing="0" cols="1" width="100%" border="0">
+<tbody><tr>
+<td>
+<center>
+<font size="+3"><b>JSP Tutorial</b></font>
+<br>
+		</center>
+</td>
+</tr>
+
+<tr>
+<td>
+<h2>
+Mixing Scriptlets and HTML</h2>
+We have already seen how to use the "<tt>out</tt>" variable to generate
+HTML output from within a scriptlet.&nbsp; For more complicated HTML, using
+the out variable all the time loses some of the advantages of JSP programming.&nbsp;
+It is simpler to mix scriptlets and HTML.
+<p>Suppose you have to generate a table in HTML.&nbsp; This is a common
+operation, and you may want to generate a table from a SQL table, or from
+the lines of a file.&nbsp; But to keep our example simple, we will generate
+a table containing the numbers from 1 to N.&nbsp; Not very useful, but
+it will show you the technique.
+</p><p>Here is the JSP fragment to do it:
+</p><pre>&lt;TABLE BORDER=2&gt;
+&lt;%
+&nbsp;&nbsp;&nbsp; for ( int i = 0; i &lt; n; i++ ) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;TR&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;TD&gt;Number&lt;/TD&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;TD&gt;&lt;%= i+1 %&gt;&lt;/TD&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/TR&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;%
+&nbsp;&nbsp;&nbsp; }
+%&gt;
+&lt;/TABLE&gt;</pre>
+You would have to supply an <tt>int</tt> variable "n" before it will work,
+and then it will output a simple table with "n" rows.
+<p>The important things to notice are how the <tt>%&gt;</tt> and <tt>&lt;%</tt>
+characters appear in the middle of the "<tt>for</tt>" loop, to let you
+drop back into HTML and then to come back to the scriptlet.
+</p><p>The concepts are simple here -- as you can see, you can drop out of
+the scriptlets, write normal HTML, and get back into the scriptlet.&nbsp;
+Any control expressions such as a "while" or a "for" loop or an "if" expression
+will control the HTML also.&nbsp; If the HTML is inside a loop, it will
+be emitted once for each iteration of the loop.
+</p><p>Another example of mixing scriptlets and HTML is shown below -- here
+it is assumed that there is a boolean variable named "<tt>hello</tt>" available.&nbsp;
+If you set it to true, you will see one output, if you set it to false,
+you will see another output.
+</p><pre>&lt;%
+&nbsp;&nbsp;&nbsp; if ( hello ) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;P&gt;Hello, world
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;%
+&nbsp;&nbsp;&nbsp; } else {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;P&gt;Goodbye, world
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;%
+&nbsp;&nbsp;&nbsp; }
+%&gt;</pre>
+It is a little difficult to keep track of all open braces and scriptlet
+start and ends, but with a little practice and some good formatting discipline,
+you will acquire competence in doing it.
+<p><i>Exercise:</i>&nbsp; Make the above examples work.&nbsp; Write a JSP
+to output all the values returned by <tt>System.getProperties</tt> with
+"&lt;BR&gt;" embedded after each property name and value.&nbsp; Do not output
+the "&lt;BR&gt;" using the "out" variable.
+<br>&nbsp;</p></td>
+</tr>
+
+<tr>
+<td>
+<center><!-- jsp:include page="/header.jsp"/ --></center>
+<br>
+<table cellpadding="0" cellspacing="0" width="100%" border="0">
+<tbody><tr>
+<td><a href="06.html">Next tutorial: JSP Directives</a></td>
+
+<td>
+<div align="right"><font size="-1"><a href="index.html#contents">Contents</a></font></div>
+</td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+</tbody></table>
+
+
+
+</body></html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html><head>
+   <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+   <meta name="GENERATOR" content="Mozilla/4.75 [en] (Win98; U) [Netscape]">
+   <meta name="Description" content="JSP Tutorial">
+   <meta name="Keywords" content="JSP Tutorial">
+   <title>JSP Tutorial</title>
+</head>
+<body>
+<table cellpadding="0" cellspacing="0" cols="1" width="100%" border="0">
+<tbody><tr>
+<td>
+<center>
+<font size="+3"><b>JSP Tutorial</b></font>
+<br>
+		</center>
+</td>
+</tr>
+
+<tr>
+<td>
+<h2>
+JSP Directives</h2>
+We have been fully qualifying the <tt>java.util.Date</tt> in the examples
+in the previous sections.&nbsp; Perhaps you wondered why we don't just
+import java.util.*;
+<p>It is possible to use "<tt>import</tt>" statements in JSPs, but the
+syntax is a little different from normal Java.&nbsp; Try the following
+example:
+</p><pre>&lt;%@ page import="java.util.*" %&gt;
+&lt;HTML&gt;
+&lt;BODY&gt;
+&lt;%
+&nbsp;&nbsp;&nbsp; System.out.println( "Evaluating date now" );
+&nbsp;&nbsp;&nbsp; Date date = new Date();
+%&gt;
+Hello!&nbsp; The time is now &lt;%= date %&gt;
+&lt;/BODY&gt;
+&lt;/HTML&gt;</pre>
+The first line in the above example is called a "directive".&nbsp; A JSP
+"directive" starts with <tt>&lt;%@</tt> characters.
+<p>This one is a "page directive".&nbsp; The page directive can contain
+the list of all imported packages.&nbsp; To import more than one item,
+separate the package names by commas, e.g.
+</p><pre>&lt;%@ page import="java.util.*,java.text.*" %&gt;</pre>
+There are a number of JSP directives, besides the page directive.&nbsp;
+Besides the page directives, the other most useful directives are include
+and taglib.&nbsp; We will be covering taglib separately.
+<p>The include directive is used to physically include the contents of
+another file.&nbsp; The included file can be HTML or JSP or anything else
+-- the result is as if the original JSP file actually contained the included
+text.&nbsp; To see this directive in action, create a new JSP
+</p><pre>&lt;HTML&gt;
+&lt;BODY&gt;
+Going to include hello.jsp...&lt;BR&gt;
+&lt;%@ include file="hello.jsp" %&gt;
+&lt;/BODY&gt;
+&lt;/HTML&gt;</pre>
+View this JSP in your browser, and you will see your original <tt>hello.jsp</tt>
+get included in the new JSP.
+<p><i>Exercise:</i>&nbsp; Modify all your earlier exercises to import the
+java.util packages.
+<br>&nbsp;
+</p><center><!-- jsp:include page="/header.jsp"/ --></center>
+<br>
+<table cellpadding="0" cellspacing="0" width="100%" border="0">
+<tbody><tr>
+<td><a href="07.html">Next tutorial: JSP Declarations</a></td>
+
+<td>
+<div align="right"><font size="-1"><a href="index.html#contents">Contents</a></font></div>
+</td>
+</tr>
+</tbody></table>
+</td>
+</tr>
+
+<tr>
+<td></td>
+</tr>
+</tbody></table>
+
+
+</body></html>

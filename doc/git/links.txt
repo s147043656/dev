@@ -1,0 +1,4 @@
+gitignore man:
+    http://git-scm.com/docs/gitignore
+Git HowTo:
+    http://githowto.com/ru/

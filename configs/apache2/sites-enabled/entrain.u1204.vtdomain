@@ -1,0 +1,9 @@
+<VirtualHost *:80>
+    ServerAdmin webmaster@u1204.vtdomain
+    ServerName entrain.u1204.vtdomain
+    ProxyRequests off
+    ProxyPreserveHost on
+    ProxyPass / http://entrain.u1204.vtdomain:8080/entrain/
+    ErrorLog "${APACHE_LOG_DIR}/entrain.u1204.vtdomain-error.log"
+    CustomLog "${APACHE_LOG_DIR}/entrain.u1204.vtdomain-access.log" combined
+</VirtualHost>

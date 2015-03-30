@@ -1,0 +1,9 @@
+<VirtualHost *:80>
+    ServerAdmin webmaster@u1204.vtdomain
+    ServerName tc.u1204.vtdomain
+    ProxyRequests off
+    ProxyPreserveHost on
+    ProxyPass / http://tc.u1204.vtdomain:8111/
+    ErrorLog "${APACHE_LOG_DIR}/tc.u1204.vtdomain-error.log"
+    CustomLog "${APACHE_LOG_DIR}/tc.u1204.vtdomain-access.log" combined
+</VirtualHost>
