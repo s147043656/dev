@@ -18,10 +18,10 @@
         <form action="index.jsp" method="get">
   <pre>
         Please enter a word to translate:
-        <INPUT name="wordToTranslate">
+        <input name="wordToTranslate">
         <% String wtt=request.getParameter("wordToTranslate"); %>
         </INPUT>
-        <BUTTON type="submit">Translate</BUTTON>
+        <input type="submit" value="Translate"/>
         </form>
         Word:         <b><% out.println(wtt); %></b>
         Translation:  <b><% out.println(Trainer.getTranslateEnUa(wtt)); %></b>

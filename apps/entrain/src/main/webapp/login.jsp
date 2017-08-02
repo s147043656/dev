@@ -13,20 +13,24 @@
    <td width="100"><a href="trainer.jsp">Trainer</a></td>
    <td width="440"><a href="examples.jsp">Examples</a></td>
   </table>
+  </br></br>
   <pre>
-        <h2>Hello, please log in:</h2>
-        <form name="LoginForm" action="j_security_check" method="POST">
-        <strong>Please type your user name: </strong>
-        <input name="j_username" size="20">
+        <strong>Please log in using your username and password.</strong>
+        <form name="LoginForm" action="login.jsp" method="POST">
+        User name: <input name="j_username" size="20">
         <% String juname=request.getParameter("j_username"); %>
         </input>
-        <strong>Please type your password: </strong>
-        <input name="j_password" size="20">
+        Password:  <input name="j_password" size="20">
         <% String jpassword=request.getParameter("j_password"); %>
         </input>
-        <input type="submit" value="Submit"/>
-        <input type="reset" value="Reset"/>
+                   <input type="submit" value="Submit"/>
         </form>
+
+        <%
+         System.out.println( "Evaluating date now" );
+         java.util.Date date3 = new java.util.Date();
+        %>
+        The time is now <%= date3 %><br><br>
   </pre>
  </body>
 </html>
